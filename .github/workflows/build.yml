@@ -1,0 +1,23 @@
+name: Build Dummy DX11 App
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Build dummy DX11 app
+      run: |
+        cl /EHsc CS2DummyInit.cpp /link /OUT:CS2DummyInit.exe d3d11.lib dxgi.lib user32.lib
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: CS2DummyInit
+        path: CS2DummyInit.exe
