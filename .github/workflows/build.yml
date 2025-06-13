@@ -12,12 +12,15 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - name: Set up MSVC Developer Command Prompt
+      uses: ilammy/msvc-dev-cmd@v1
+
     - name: Build dummy DX11 app
       run: |
         cl /EHsc CS2DummyInit.cpp /link /OUT:CS2DummyInit.exe d3d11.lib dxgi.lib user32.lib
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: CS2DummyInit
         path: CS2DummyInit.exe
