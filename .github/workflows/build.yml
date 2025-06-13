@@ -2,7 +2,7 @@ name: Build Dummy DX11 App
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
@@ -10,17 +10,19 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Set up MSVC Developer Command Prompt
-      uses: ilammy/msvc-dev-cmd@v1
+      - name: Set up MSBuild
+        uses: microsoft/setup-msbuild@v2
 
-    - name: Build dummy DX11 app
-      run: |
-        cl /EHsc CS2DummyInit.cpp /link /OUT:CS2DummyInit.exe d3d11.lib dxgi.lib user32.lib
+      - name: Build CS2DummyInit.exe
+        run: |
+          mkdir build
+          cl /EHsc /W4 /DUNICODE /D_UNICODE /nologo /Fe:build\CS2DummyInit.exe CS2DummyInit.cpp user32.lib gdi32.lib d3d11.lib dxgi.lib
 
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: CS2DummyInit
-        path: CS2DummyInit.exe
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: CS2DummyInit
+          path: build/CS2DummyInit.exe
